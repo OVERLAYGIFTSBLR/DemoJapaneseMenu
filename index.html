@@ -316,21 +316,22 @@
   src=""
   alt="Dish 3D model"
   loading="eager"
-  reveal="interaction"
-  preload
-  poster="images/loading.webp"
+  reveal="auto"
   ar
   ar-button="none"
   ar-modes="webxr scene-viewer quick-look"
   ar-scale="fixed"
   ar-placement="floor"
+  ar-hit-test="true"
+  camera-controls
+  disable-pan
+  touch-action="pan-y"
+  interaction-prompt="auto"
   shadow-intensity="1"
   exposure="1"
   environment-image="neutral"
-  camera-controls
   camera-orbit="0deg 75deg 2.5m"
   field-of-view="30deg"
-  interaction-prompt="none"
   style="width:100%;height:100%;">
 </model-viewer>
 
@@ -736,26 +737,31 @@ if (loader) loader.style.display = 'flex';
     arBtn.classList.remove('visible');
 // 🛑 STOP previous model (VERY IMPORTANT)
 // Stop previous model safely
+// Stop previous
 if (viewer.pause) viewer.pause();
 
-// Reset
+// Reset properly
 viewer.removeAttribute("src");
 viewer.removeAttribute("ios-src");
 
-// Load new model
+// SHOW loader
+if (loader) loader.style.display = 'flex';
+if (noMod) noMod.style.display = 'none';
+if (arBtn) arBtn.classList.remove('visible');
+if (hint) hint.textContent = 'Loading model…';
+
+// Load model
 viewer.src = dish.glb_url;
-viewer.setAttribute("ios-src", dish.glb_url.replace(".glb", ".usdz"));
 
-    // Remove previous onload (clean reset)
-viewer.onload = null;
+// ONLY if usdz exists (optional)
+// viewer.setAttribute("ios-src", dish.glb_url.replace(".glb", ".usdz"));
 
-// Load event (single clean handler)
+// Load event (IMPORTANT)
 viewer.onload = () => {
   if (loader) loader.style.display = 'none';
   if (hint) hint.textContent = 'Drag to rotate · Pinch to zoom';
   if (arBtn) arBtn.classList.add('visible');
 };
-   
 
   } else {
   viewer.removeAttribute('src');
