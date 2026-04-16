@@ -137,7 +137,9 @@ body::before{
   backdrop-filter:blur(0px);
 }
 .hud-row1{display:flex;align-items:center;justify-content:space-between;pointer-events:all}
-.hud-brand{display:flex;align-items:baseline;gap:10px;}
+.hud-brand{
+  display:flex;align-items:baseline;gap:10px;
+}
 .hud-brand-name{font-family:var(--ff-en);font-size:24px;font-weight:400;letter-spacing:0.12em}
 .hud-brand-jp{font-family:var(--ff-jp);font-size:10px;font-weight:200;letter-spacing:0.3em;color:rgba(240,232,213,0.28)}
 .hud-right{display:flex;align-items:center;gap:10px}
@@ -217,11 +219,6 @@ model-viewer{
   --poster-color:transparent;
   --progress-bar-color:rgba(196,81,58,0.4);
   --progress-mask:transparent;
-}
-
-/* ── FIX: Style the native model-viewer AR slot button ── */
-model-viewer > button[slot="ar-button"] {
-  display: none !important;
 }
 
 .viewer-no-model{
@@ -360,13 +357,13 @@ model-viewer > button[slot="ar-button"] {
   border-radius:var(--radius);cursor:pointer;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
   transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);
-  position:relative;overflow:visible;
+  position:relative;overflow:hidden;
   padding:0;
 }
 .btn-ar::before{
   content:'';position:absolute;inset:0;
   background:linear-gradient(135deg,rgba(122,46,30,0.2),transparent);
-  opacity:0;transition:opacity 0.3s;border-radius:var(--radius);
+  opacity:0;transition:opacity 0.3s;
 }
 .btn-ar:hover::before{opacity:1}
 .btn-ar:hover{
@@ -376,24 +373,8 @@ model-viewer > button[slot="ar-button"] {
   transform:translateY(-1px);
 }
 .btn-ar:active{transform:scale(0.92)}
-
-/* no-model: dimmed but still hoverable for tooltip */
-.btn-ar.no-model{
-  opacity:0.3;
-  cursor:not-allowed;
-}
-.btn-ar.no-model:hover{
-  transform:none;
-  box-shadow:none;
-  border-color:rgba(240,232,213,0.12);
-  background:rgba(240,232,213,0.05);
-}
-
-/* AR not-available state */
-.btn-ar.ar-unavailable{
-  border-color:rgba(240,232,213,0.08);
-}
-
+.btn-ar.no-model{opacity:0.25;cursor:not-allowed;pointer-events:none;}
+.btn-ar.no-model:hover{transform:none;box-shadow:none;}
 .btn-ar-icon{
   display:flex;align-items:center;justify-content:center;
   color:rgba(240,232,213,0.75);
@@ -408,41 +389,20 @@ model-viewer > button[slot="ar-button"] {
 }
 .btn-ar:hover .btn-ar-icon{color:rgba(240,232,213,0.95)}
 .btn-ar:hover .btn-ar-txt{color:rgba(240,232,213,0.65)}
-.btn-ar.no-model:hover .btn-ar-icon{color:rgba(240,232,213,0.3)}
-.btn-ar.no-model:hover .btn-ar-txt{color:rgba(240,232,213,0.2)}
 
-/* AR tooltip badge — shows above button on hover */
+/* AR not available badge that appears on hover */
 .btn-ar-badge{
-  position:absolute;
-  bottom:calc(100% + 8px);
-  right:0;
-  background:rgba(5,3,2,0.95);
-  border:1px solid rgba(240,232,213,0.12);
-  border-radius:4px;
-  padding:6px 10px;
-  font-size:9px;
-  color:rgba(240,232,213,0.6);
-  white-space:nowrap;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity 0.2s, transform 0.2s;
-  transform:translateY(4px);
+  position:absolute;bottom:calc(100% + 8px);right:0;
+  background:rgba(5,3,2,0.92);
+  border:1px solid rgba(240,232,213,0.1);
+  border-radius:4px;padding:5px 10px;
+  font-size:9px;color:rgba(240,232,213,0.5);
+  white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity 0.2s;
   backdrop-filter:blur(8px);
   letter-spacing:0.06em;
-  z-index:999;
-  box-shadow:0 4px 16px rgba(0,0,0,0.5);
 }
-.btn-ar:hover .btn-ar-badge{
-  opacity:1;
-  transform:translateY(0);
-}
-
-/* AR active state */
-.btn-ar.ar-active{
-  border-color:rgba(196,81,58,0.6);
-  background:rgba(196,81,58,0.12);
-  box-shadow:0 0 24px rgba(122,46,30,0.4);
-}
+.btn-ar:hover .btn-ar-badge{opacity:1}
 
 /* ── ORDER SCREEN ── */
 #screenOrder{
@@ -817,13 +777,13 @@ const TABLE_INFO   = 'Indoor · Window Seat';
    TRANSLATIONS
 ══════════════════════════════════════════════ */
 const T = {
-  en:{addToCart:'Add to Cart',orderTitle:'Your Order',orderSub:'ご注文内容',totalLabel:'合計 · Total',sendBtn:'Send to Kitchen 🍜',specialPlaceholder:'Special instructions…',empty:'Your order is empty',emptySub:'まだ注文がありません',noModel:'3D Preview Coming Soon',drag3d:'3D · Drag to Rotate',preview:'Dish Preview',vegPill:'Veg',chefPill:'Chef\'s Pick',newPill:'New',loading:'Loading…',toastSuffix:'added',waNote:'KOT via WhatsApp',waNoteSubT:'Sent directly to kitchen',successTitle:'Order Placed!',successSub:'Your order has been sent',successDone:'Done',wcTitle:'Call Waiter',wcWaiter:'Call Waiter',wcWaiterMsg:'Waiter is needed at',wcWater:'Request Water',wcWaterMsg:'Please bring water to',wcBill:'Ask for Bill',wcBillMsg:'Please bring the bill for',wcTissues:'Tissues',wcTissuesMsg:'Please bring tissues to',wcChair:'Extra Chair',wcChairMsg:'Please bring extra chair to',wcCooldown:'Already sent — staff notified ⏳',wcSentPrefix:'Staff notified',tapAR:'Tap AR to view in your space',arBtn:'AR',arNotAvail:'AR not supported on this device',arLaunching:'Launching AR…',arNoModel:'No 3D model available'},
-  jp:{addToCart:'カートに追加',orderTitle:'ご注文内容',orderSub:'Your Order',totalLabel:'合計金額',sendBtn:'厨房へ送る 🍜',specialPlaceholder:'ご要望・備考…',empty:'まだ注文がありません',emptySub:'Your order is empty',noModel:'3Dプレビュー近日公開',drag3d:'3D · ドラッグで回転',preview:'料理プレビュー',vegPill:'野菜',chefPill:'本日のおすすめ',newPill:'新着',loading:'読込中…',toastSuffix:'をカートに追加しました',waNote:'KOT via WhatsApp',waNoteSubT:'厨房へ直接送信',successTitle:'ご注文完了',successSub:'Order Sent',successDone:'閉じる',wcTitle:'スタッフ呼出',wcWaiter:'ウェイターを呼ぶ',wcWaiterMsg:'ウェイターが必要です',wcWater:'お水をください',wcWaterMsg:'お水をお持ちください',wcBill:'お会計をお願いします',wcBillMsg:'お会計をお持ちください',wcTissues:'ティッシュ',wcTissuesMsg:'ティッシュをお持ちください',wcChair:'椅子を追加',wcChairMsg:'椅子を追加してください',wcCooldown:'送信済み — スタッフが確認中 ⏳',wcSentPrefix:'スタッフに通知しました',tapAR:'ARで空間に配置',arBtn:'AR',arNotAvail:'このデバイスではAR非対応',arLaunching:'AR起動中…',arNoModel:'3Dモデルなし'},
-  hi:{addToCart:'कार्ट में डालें',orderTitle:'आपका ऑर्डर',orderSub:'Your Order',totalLabel:'कुल राशि',sendBtn:'रसोई को भेजें 🍜',specialPlaceholder:'विशेष निर्देश…',empty:'आपका ऑर्डर खाली है',emptySub:'Your order is empty',noModel:'3D प्रीव्यू जल्द आएगा',drag3d:'3D · घुमाने के लिए खींचें',preview:'व्यंजन झलक',vegPill:'शाकाहारी',chefPill:'शेफ का चयन',newPill:'नया',loading:'लोड हो रहा है…',toastSuffix:'कार्ट में जोड़ा गया',waNote:'WhatsApp द्वारा KOT',waNoteSubT:'सीधे रसोई को भेजा जाएगा',successTitle:'ऑर्डर हो गया!',successSub:'आपका ऑर्डर भेज दिया गया',successDone:'बंद करें',wcTitle:'वेटर बुलाएं',wcWaiter:'वेटर बुलाएं',wcWaiterMsg:'टेबल पर वेटर चाहिए',wcWater:'पानी मंगाएं',wcWaterMsg:'कृपया पानी लाएं',wcBill:'बिल मंगाएं',wcBillMsg:'कृपया बिल लाएं',wcTissues:'टिशू चाहिए',wcTissuesMsg:'कृपया टिशू लाएं',wcChair:'अतिरिक्त कुर्सी',wcChairMsg:'कृपया एक कुर्सी और लाएं',wcCooldown:'पहले ही भेज दिया — स्टाफ को सूचित किया गया ⏳',wcSentPrefix:'स्टाफ को सूचित किया गया',tapAR:'AR में देखें',arBtn:'AR',arNotAvail:'इस डिवाइस पर AR उपलब्ध नहीं',arLaunching:'AR लॉन्च हो रहा है…',arNoModel:'3D मॉडल उपलब्ध नहीं'},
-  kn:{addToCart:'ಬುಟ್ಟಿಗೆ ಸೇರಿಸಿ',orderTitle:'ನಿಮ್ಮ ಆದೇಶ',orderSub:'Your Order',totalLabel:'ಒಟ್ಟು ಮೊತ್ತ',sendBtn:'ಅಡುಗೆಮನೆಗೆ ಕಳುಹಿಸಿ 🍜',specialPlaceholder:'ವಿಶೇಷ ಸೂಚನೆಗಳು…',empty:'ನಿಮ್ಮ ಆದೇಶ ಖಾಲಿ ಇದೆ',emptySub:'Your order is empty',noModel:'3D ಮುನ್ನೋಟ ಶೀಘ್ರದಲ್ಲಿ',drag3d:'3D · ತಿರುಗಿಸಲು ಎಳೆಯಿರಿ',preview:'ಭಕ್ಷ್ಯ ಮುನ್ನೋಟ',vegPill:'ಶಾಕಾಹಾರ',chefPill:'ಶೆಫ್ ಆಯ್ಕೆ',newPill:'ಹೊಸತು',loading:'ಲೋಡ್ ಆಗುತ್ತಿದೆ…',toastSuffix:'ಬುಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ',waNote:'WhatsApp ಮೂಲಕ KOT',waNoteSubT:'ನೇರವಾಗಿ ಅಡುಗೆಮನೆಗೆ',successTitle:'ಆದೇಶ ದಾಖಲಾಯಿತು!',successSub:'ನಿಮ್ಮ ಆದೇಶ ಕಳುಹಿಸಲಾಗಿದೆ',successDone:'ಮುಚ್ಚಿರಿ',wcTitle:'ವೇಟರ್ ಕರೆಯಿರಿ',wcWaiter:'ವೇಟರ್ ಕರೆಯಿರಿ',wcWaiterMsg:'ಟೇಬಲ್‌ಗೆ ವೇಟರ್ ಬೇಕು',wcWater:'ನೀರು ತರಿಸಿ',wcWaterMsg:'ದಯವಿಟ್ಟು ನೀರು ತನ್ನಿ',wcBill:'ಬಿಲ್ ತರಿಸಿ',wcBillMsg:'ದಯವಿಟ್ಟು ಬಿಲ್ ತನ್ನಿ',wcTissues:'ಟಿಶ್ಯೂ ಬೇಕು',wcTissuesMsg:'ದಯವಿಟ್ಟು ಟಿಶ್ಯೂ ತನ್ನಿ',wcChair:'ಹೆಚ್ಚುವರಿ ಕುರ್ಚಿ',wcChairMsg:'ದಯವಿಟ್ಟು ಕುರ್ಚಿ ತನ್ನಿ',wcCooldown:'ಈಗಾಗಲೇ ಕಳುಹಿಸಲಾಗಿದೆ ⏳',wcSentPrefix:'ಸಿಬ್ಬಂದಿಗೆ ತಿಳಿಸಲಾಗಿದೆ',tapAR:'AR ನಲ್ಲಿ ನೋಡಿ',arBtn:'AR',arNotAvail:'ಈ ಸಾಧನದಲ್ಲಿ AR ಲಭ್ಯವಿಲ್ಲ',arLaunching:'AR ಲಾಂಚ್ ಆಗುತ್ತಿದೆ…',arNoModel:'3D ಮಾದರಿ ಇಲ್ಲ'},
-  ta:{addToCart:'கூடையில் சேர்க்க',orderTitle:'உங்கள் ஆர்டர்',orderSub:'Your Order',totalLabel:'மொத்தத் தொகை',sendBtn:'சமையலறைக்கு அனுப்பு 🍜',specialPlaceholder:'சிறப்பு வேண்டுகோள்…',empty:'உங்கள் ஆர்டர் காலியாக உள்ளது',emptySub:'Your order is empty',noModel:'3D முன்னோட்டம் விரைவில்',drag3d:'3D · சுழற்ற இழுக்கவும்',preview:'உணவு முன்னோட்டம்',vegPill:'சைவம்',chefPill:'சேஃப் தேர்வு',newPill:'புதியது',loading:'ஏற்றுகிறது…',toastSuffix:'கூடையில் சேர்க்கப்பட்டது',waNote:'WhatsApp வழி KOT',waNoteSubT:'நேரடியாக சமையலறைக்கு',successTitle:'ஆர்டர் பதிவானது!',successSub:'உங்கள் ஆர்டர் அனுப்பப்பட்டது',successDone:'மூடு',wcTitle:'பணியாளரை அழைக்க',wcWaiter:'பணியாளரை அழைக்க',wcWaiterMsg:'மேஜையில் பணியாளர் தேவை',wcWater:'தண்ணீர் கேட்க',wcWaterMsg:'தண்ணீர் கொண்டுவாருங்கள்',wcBill:'கணக்கு கேட்க',wcBillMsg:'கணக்கு கொண்டுவாருங்கள்',wcTissues:'டிஷ்யூ வேணும்',wcTissuesMsg:'டிஷ்யூ கொண்டுவாருங்கள்',wcChair:'கூடுதல் நாற்காலி',wcChairMsg:'நாற்காலி கொண்டுவாருங்கள்',wcCooldown:'ஏற்கனவே அனுப்பப்பட்டது ⏳',wcSentPrefix:'பணியாளர் அறிவிக்கப்பட்டனர்',tapAR:'AR இல் காண',arBtn:'AR',arNotAvail:'இந்த சாதனத்தில் AR இல்லை',arLaunching:'AR தொடங்குகிறது…',arNoModel:'3D மாதிரி இல்லை'},
-  ml:{addToCart:'കൂടയിൽ ചേർക്കുക',orderTitle:'നിങ്ങളുടെ ഓർഡർ',orderSub:'Your Order',totalLabel:'ആകെ തുക',sendBtn:'അടുക്കളയിലേക്ക് അയക്കുക 🍜',specialPlaceholder:'പ്രത്യേക നിർദ്ദേശങ്ങൾ…',empty:'നിങ്ങളുടെ ഓർഡർ ശൂന്യമാണ്',emptySub:'Your order is empty',noModel:'3D പ്രിവ്യൂ ഉടൻ വരും',drag3d:'3D · തിരിക്കാൻ വലിക്കുക',preview:'വിഭവ പ്രിവ്യൂ',vegPill:'സസ്യഭക്ഷണം',chefPill:'ഷെഫ് ചോയ്‌സ്',newPill:'പുതിയത്',loading:'ലോഡ് ചെയ്യുന്നു…',toastSuffix:'കൂടയിൽ ചേർത്തു',waNote:'WhatsApp വഴി KOT',waNoteSubT:'നേരിട്ട് അടുക്കളയിലേക്ക്',successTitle:'ഓർഡർ ലഭിച്ചു!',successSub:'നിങ്ങളുടെ ഓർഡർ അയച്ചു',successDone:'ശരി',wcTitle:'വെയ്റ്ററെ വിളിക്കുക',wcWaiter:'വെയ്റ്ററെ വിളിക്കുക',wcWaiterMsg:'ടേബിളിൽ വെയ്റ്റർ ആവശ്യം',wcWater:'വെള്ളം വേണം',wcWaterMsg:'ദയവായി വെള്ളം കൊണ്ടുവരൂ',wcBill:'ബിൽ വേണം',wcBillMsg:'ദയവായി ബിൽ കൊണ്ടുവരൂ',wcTissues:'ടിഷ്യൂ വേണം',wcTissuesMsg:'ദയവായി ടിഷ്യൂ കൊണ്ടുവരൂ',wcChair:'അധിക കസേര',wcChairMsg:'ദയവായി കസേര കൊണ്ടുവരൂ',wcCooldown:'ഇതിനകം അയച്ചു ⏳',wcSentPrefix:'ജീവനക്കാരെ അറിയിച്ചു',tapAR:'AR ൽ കാണുക',arBtn:'AR',arNotAvail:'ഈ ഉപകരണത്തിൽ AR ലഭ്യമല്ല',arLaunching:'AR ആരംഭിക്കുന്നു…',arNoModel:'3D മോഡൽ ലഭ്യമല്ല'},
-  te:{addToCart:'బుట్టలో వేయండి',orderTitle:'మీ ఆర్డర్',orderSub:'Your Order',totalLabel:'మొత్తం',sendBtn:'వంటగదికి పంపండి 🍜',specialPlaceholder:'ప్రత్యేక సూచనలు…',empty:'మీ ఆర్డర్ ఖాళీగా ఉంది',emptySub:'Your order is empty',noModel:'3D ప్రివ్యూ త్వరలో',drag3d:'3D · తిప్పడానికి లాగండి',preview:'వంటకం ప్రివ్యూ',vegPill:'శాఖాహారం',chefPill:'షెఫ్ చాయిస్',newPill:'కొత్తది',loading:'లోడ్ అవుతోంది…',toastSuffix:'బుట్టలో వేయబడింది',waNote:'WhatsApp ద్వారా KOT',waNoteSubT:'నేరుగా వంటగదికి',successTitle:'ఆర్డర్ అయింది!',successSub:'మీ ఆర్డర్ పంపబడింది',successDone:'సరే',wcTitle:'వెయిటర్‌ని పిలవండి',wcWaiter:'వెయిటర్‌ని పిలవండి',wcWaiterMsg:'టేబుల్ వద్ద వెయిటర్ అవసరం',wcWater:'నీళ్ళు తెప్పించండి',wcWaterMsg:'దయచేసి నీళ్ళు తీసుకురండి',wcBill:'బిల్లు తెప్పించండి',wcBillMsg:'దయచేసి బిల్లు తీసుకురండి',wcTissues:'టిష్యూ కావాలి',wcTissuesMsg:'దయచేసి టిష్యూ తీసుకురండి',wcChair:'అదనపు కుర్చీ',wcChairMsg:'దయచేసి కుర్చీ తీసుకురండి',wcCooldown:'ఇప్పటికే పంపబడింది ⏳',wcSentPrefix:'సిబ్బందికి తెలియజేయబడింది',tapAR:'AR లో చూడండి',arBtn:'AR',arNotAvail:'ఈ పరికరంలో AR అందుబాటులో లేదు',arLaunching:'AR లాంచ్ అవుతోంది…',arNoModel:'3D మోడల్ అందుబాటులో లేదు'},
+  en:{addToCart:'Add to Cart',orderTitle:'Your Order',orderSub:'ご注文内容',totalLabel:'合計 · Total',sendBtn:'Send to Kitchen 🍜',specialPlaceholder:'Special instructions…',empty:'Your order is empty',emptySub:'まだ注文がありません',noModel:'3D Preview Coming Soon',drag3d:'3D · Drag to Rotate',preview:'Dish Preview',vegPill:'Veg',chefPill:'Chef\'s Pick',newPill:'New',loading:'Loading…',toastSuffix:'added',waNote:'KOT via WhatsApp',waNoteSubT:'Sent directly to kitchen',successTitle:'Order Placed!',successSub:'Your order has been sent',successDone:'Done',wcTitle:'Call Waiter',wcWaiter:'Call Waiter',wcWaiterMsg:'Waiter is needed at',wcWater:'Request Water',wcWaterMsg:'Please bring water to',wcBill:'Ask for Bill',wcBillMsg:'Please bring the bill for',wcTissues:'Tissues',wcTissuesMsg:'Please bring tissues to',wcChair:'Extra Chair',wcChairMsg:'Please bring extra chair to',wcCooldown:'Already sent — staff notified ⏳',wcSentPrefix:'Staff notified',tapAR:'Tap AR to view in your space',arBtn:'AR',arNotAvail:'AR not supported on this device'},
+  jp:{addToCart:'カートに追加',orderTitle:'ご注文内容',orderSub:'Your Order',totalLabel:'合計金額',sendBtn:'厨房へ送る 🍜',specialPlaceholder:'ご要望・備考…',empty:'まだ注文がありません',emptySub:'Your order is empty',noModel:'3Dプレビュー近日公開',drag3d:'3D · ドラッグで回転',preview:'料理プレビュー',vegPill:'野菜',chefPill:'本日のおすすめ',newPill:'新着',loading:'読込中…',toastSuffix:'をカートに追加しました',waNote:'KOT via WhatsApp',waNoteSubT:'厨房へ直接送信',successTitle:'ご注文完了',successSub:'Order Sent',successDone:'閉じる',wcTitle:'スタッフ呼出',wcWaiter:'ウェイターを呼ぶ',wcWaiterMsg:'ウェイターが必要です',wcWater:'お水をください',wcWaterMsg:'お水をお持ちください',wcBill:'お会計をお願いします',wcBillMsg:'お会計をお持ちください',wcTissues:'ティッシュ',wcTissuesMsg:'ティッシュをお持ちください',wcChair:'椅子を追加',wcChairMsg:'椅子を追加してください',wcCooldown:'送信済み — スタッフが確認中 ⏳',wcSentPrefix:'スタッフに通知しました',tapAR:'ARで空間に配置',arBtn:'AR',arNotAvail:'このデバイスではAR非対応'},
+  hi:{addToCart:'कार्ट में डालें',orderTitle:'आपका ऑर्डर',orderSub:'Your Order',totalLabel:'कुल राशि',sendBtn:'रसोई को भेजें 🍜',specialPlaceholder:'विशेष निर्देश…',empty:'आपका ऑर्डर खाली है',emptySub:'Your order is empty',noModel:'3D प्रीव्यू जल्द आएगा',drag3d:'3D · घुमाने के लिए खींचें',preview:'व्यंजन झलक',vegPill:'शाकाहारी',chefPill:'शेफ का चयन',newPill:'नया',loading:'लोड हो रहा है…',toastSuffix:'कार्ट में जोड़ा गया',waNote:'WhatsApp द्वारा KOT',waNoteSubT:'सीधे रसोई को भेजा जाएगा',successTitle:'ऑर्डर हो गया!',successSub:'आपका ऑर्डर भेज दिया गया',successDone:'बंद करें',wcTitle:'वेटर बुलाएं',wcWaiter:'वेटर बुलाएं',wcWaiterMsg:'टेबल पर वेटर चाहिए',wcWater:'पानी मंगाएं',wcWaterMsg:'कृपया पानी लाएं',wcBill:'बिल मंगाएं',wcBillMsg:'कृपया बिल लाएं',wcTissues:'टिशू चाहिए',wcTissuesMsg:'कृपया टिशू लाएं',wcChair:'अतिरिक्त कुर्सी',wcChairMsg:'कृपया एक कुर्सी और लाएं',wcCooldown:'पहले ही भेज दिया — स्टाफ को सूचित किया गया ⏳',wcSentPrefix:'स्टाफ को सूचित किया गया',tapAR:'AR में देखें',arBtn:'AR',arNotAvail:'इस डिवाइस पर AR उपलब्ध नहीं'},
+  kn:{addToCart:'ಬುಟ್ಟಿಗೆ ಸೇರಿಸಿ',orderTitle:'ನಿಮ್ಮ ಆದೇಶ',orderSub:'Your Order',totalLabel:'ಒಟ್ಟು ಮೊತ್ತ',sendBtn:'ಅಡುಗೆಮನೆಗೆ ಕಳುಹಿಸಿ 🍜',specialPlaceholder:'ವಿಶೇಷ ಸೂಚನೆಗಳು…',empty:'ನಿಮ್ಮ ಆದೇಶ ಖಾಲಿ ಇದೆ',emptySub:'Your order is empty',noModel:'3D ಮುನ್ನೋಟ ಶೀಘ್ರದಲ್ಲಿ',drag3d:'3D · ತಿರುಗಿಸಲು ಎಳೆಯಿರಿ',preview:'ಭಕ್ಷ್ಯ ಮುನ್ನೋಟ',vegPill:'ಶಾಕಾಹಾರ',chefPill:'ಶೆಫ್ ಆಯ್ಕೆ',newPill:'ಹೊಸತು',loading:'ಲೋಡ್ ಆಗುತ್ತಿದೆ…',toastSuffix:'ಬುಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ',waNote:'WhatsApp ಮೂಲಕ KOT',waNoteSubT:'ನೇರವಾಗಿ ಅಡುಗೆಮನೆಗೆ',successTitle:'ಆದೇಶ ದಾಖಲಾಯಿತು!',successSub:'ನಿಮ್ಮ ಆದೇಶ ಕಳುಹಿಸಲಾಗಿದೆ',successDone:'ಮುಚ್ಚಿರಿ',wcTitle:'ವೇಟರ್ ಕರೆಯಿರಿ',wcWaiter:'ವೇಟರ್ ಕರೆಯಿರಿ',wcWaiterMsg:'ಟೇಬಲ್‌ಗೆ ವೇಟರ್ ಬೇಕು',wcWater:'ನೀರು ತರಿಸಿ',wcWaterMsg:'ದಯವಿಟ್ಟು ನೀರು ತನ್ನಿ',wcBill:'ಬಿಲ್ ತರಿಸಿ',wcBillMsg:'ದಯವಿಟ್ಟು ಬಿಲ್ ತನ್ನಿ',wcTissues:'ಟಿಶ್ಯೂ ಬೇಕು',wcTissuesMsg:'ದಯವಿಟ್ಟು ಟಿಶ್ಯೂ ತನ್ನಿ',wcChair:'ಹೆಚ್ಚುವರಿ ಕುರ್ಚಿ',wcChairMsg:'ದಯವಿಟ್ಟು ಕುರ್ಚಿ ತನ್ನಿ',wcCooldown:'ಈಗಾಗಲೇ ಕಳುಹಿಸಲಾಗಿದೆ ⏳',wcSentPrefix:'ಸಿಬ್ಬಂದಿಗೆ ತಿಳಿಸಲಾಗಿದೆ',tapAR:'AR ನಲ್ಲಿ ನೋಡಿ',arBtn:'AR',arNotAvail:'ಈ ಸಾಧನದಲ್ಲಿ AR ಲಭ್ಯವಿಲ್ಲ'},
+  ta:{addToCart:'கூடையில் சேர்க்க',orderTitle:'உங்கள் ஆர்டர்',orderSub:'Your Order',totalLabel:'மொத்தத் தொகை',sendBtn:'சமையலறைக்கு அனுப்பு 🍜',specialPlaceholder:'சிறப்பு வேண்டுகோள்…',empty:'உங்கள் ஆர்டர் காலியாக உள்ளது',emptySub:'Your order is empty',noModel:'3D முன்னோட்டம் விரைவில்',drag3d:'3D · சுழற்ற இழுக்கவும்',preview:'உணவு முன்னோட்டம்',vegPill:'சைவம்',chefPill:'சேஃப் தேர்வு',newPill:'புதியது',loading:'ஏற்றுகிறது…',toastSuffix:'கூடையில் சேர்க்கப்பட்டது',waNote:'WhatsApp வழி KOT',waNoteSubT:'நேரடியாக சமையலறைக்கு',successTitle:'ஆர்டர் பதிவானது!',successSub:'உங்கள் ஆர்டர் அனுப்பப்பட்டது',successDone:'மூடு',wcTitle:'பணியாளரை அழைக்க',wcWaiter:'பணியாளரை அழைக்க',wcWaiterMsg:'மேஜையில் பணியாளர் தேவை',wcWater:'தண்ணீர் கேட்க',wcWaterMsg:'தண்ணீர் கொண்டுவாருங்கள்',wcBill:'கணக்கு கேட்க',wcBillMsg:'கணக்கு கொண்டுவாருங்கள்',wcTissues:'டிஷ்யூ வேண்டும்',wcTissuesMsg:'டிஷ்யூ கொண்டுவாருங்கள்',wcChair:'கூடுதல் நாற்காலி',wcChairMsg:'நாற்காலி கொண்டுவாருங்கள்',wcCooldown:'ஏற்கனவே அனுப்பப்பட்டது ⏳',wcSentPrefix:'பணியாளர் அறிவிக்கப்பட்டனர்',tapAR:'AR இல் காண',arBtn:'AR',arNotAvail:'இந்த சாதனத்தில் AR இல்லை'},
+  ml:{addToCart:'കൂടയിൽ ചേർക്കുക',orderTitle:'നിങ്ങളുടെ ഓർഡർ',orderSub:'Your Order',totalLabel:'ആകെ തുക',sendBtn:'അടുക്കളയിലേക്ക് അയക്കുക 🍜',specialPlaceholder:'പ്രത്യേക നിർദ്ദേശങ്ങൾ…',empty:'നിങ്ങളുടെ ഓർഡർ ശൂന്യമാണ്',emptySub:'Your order is empty',noModel:'3D പ്രിവ്യൂ ഉടൻ വരും',drag3d:'3D · തിരിക്കാൻ വലിക്കുക',preview:'വിഭവ പ്രിവ്യൂ',vegPill:'സസ്യഭക്ഷണം',chefPill:'ഷെഫ് ചോയ്‌സ്',newPill:'പുതിയത്',loading:'ലോഡ് ചെയ്യുന്നു…',toastSuffix:'കൂടയിൽ ചേർത്തു',waNote:'WhatsApp വഴി KOT',waNoteSubT:'നേരിട്ട് അടുക്കളയിലേക്ക്',successTitle:'ഓർഡർ ലഭിച്ചു!',successSub:'നിങ്ങളുടെ ഓർഡർ അയച്ചു',successDone:'ശരി',wcTitle:'വെയ്റ്ററെ വിളിക്കുക',wcWaiter:'വെയ്റ്ററെ വിളിക്കുക',wcWaiterMsg:'ടേബിളിൽ വെയ്റ്റർ ആവശ്യം',wcWater:'വെള്ളം വേണം',wcWaterMsg:'ദയവായി വെള്ളം കൊണ്ടുവരൂ',wcBill:'ബിൽ വേണം',wcBillMsg:'ദയവായി ബിൽ കൊണ്ടുവരൂ',wcTissues:'ടിഷ്യൂ വേണം',wcTissuesMsg:'ദയവായി ടിഷ്യൂ കൊണ്ടുവരൂ',wcChair:'അധിക കസേര',wcChairMsg:'ദയവായി കസേര കൊണ്ടുവരൂ',wcCooldown:'ഇതിനകം അയച്ചു ⏳',wcSentPrefix:'ജീവനക്കാരെ അറിയിച്ചു',tapAR:'AR ൽ കാണുക',arBtn:'AR',arNotAvail:'ഈ ഉപകരണത്തിൽ AR ലഭ്യമല്ല'},
+  te:{addToCart:'బుట్టలో వేయండి',orderTitle:'మీ ఆర్డర్',orderSub:'Your Order',totalLabel:'మొత్తం',sendBtn:'వంటగదికి పంపండి 🍜',specialPlaceholder:'ప్రత్యేక సూచనలు…',empty:'మీ ఆర్డర్ ఖాళీగా ఉంది',emptySub:'Your order is empty',noModel:'3D ప్రివ్యూ త్వరలో',drag3d:'3D · తిప్పడానికి లాగండి',preview:'వంటకం ప్రివ్యూ',vegPill:'శాఖాహారం',chefPill:'షెఫ్ చాయిస్',newPill:'కొత్తది',loading:'లోడ్ అవుతోంది…',toastSuffix:'బుట్టలో వేయబడింది',waNote:'WhatsApp ద్వారా KOT',waNoteSubT:'నేరుగా వంటగదికి',successTitle:'ఆర్డర్ అయింది!',successSub:'మీ ఆర్డర్ పంపబడింది',successDone:'సరే',wcTitle:'వెయిటర్‌ని పిలవండి',wcWaiter:'వెయిటర్‌ని పిలవండి',wcWaiterMsg:'టేబుల్ వద్ద వెయిటర్ అవసరం',wcWater:'నీళ్ళు తెప్పించండి',wcWaterMsg:'దయచేసి నీళ్ళు తీసుకురండి',wcBill:'బిల్లు తెప్పించండి',wcBillMsg:'దయచేసి బిల్లు తీసుకురండి',wcTissues:'టిష్యూ కావాలి',wcTissuesMsg:'దయచేసి టిష్యూ తీసుకురండి',wcChair:'అదనపు కుర్చీ',wcChairMsg:'దయచేసి కుర్చీ తీసుకురండి',wcCooldown:'ఇప్పటికే పంపబడింది ⏳',wcSentPrefix:'సిబ్బందికి తెలియజేయబడింది',tapAR:'AR లో చూడండి',arBtn:'AR',arNotAvail:'ఈ పరికరంలో AR అందుబాటులో లేదు'},
 };
 
 /* ══════════════════════════════════════════════
@@ -832,7 +792,7 @@ const T = {
 const FALLBACK=[
   {id:'g1',name:'Gyoza',jp:'餃子',names:{hi:'ग्योज़ा',kn:'ಗ್ಯೋಝಾ',ta:'கியோசா',ml:'ഗ്യോസ',te:'గ్యోజా'},category:'Starters',desc:{en:'Pan-fried pork and cabbage dumplings served with ponzu dipping sauce.',jp:'豚肉とキャベツの焼き餃子、ポン酢添え。',hi:'पोन्ज़ु सॉस के साथ पैन में तली हुई पोर्क और पत्तागोभी की पकौड़ी।',kn:'ಪೋಂಜು ಸಾಸ್ ಜೊತೆ ಪಾನ್‌ನಲ್ಲಿ ಕರಿದ ಹಂದಿ ಮತ್ತು ಎಲೆಕೋಸು ಡಂಪ್ಲಿಂಗ್.',ta:'பொன்சு சாஸுடன் பான்-வறுத்த பன்றி இறைச்சி டம்ப்ளிங்ஸ்.',ml:'പോൻസു സോസിനൊപ്പം വിളമ്പുന്ന പോർക്ക് ഡംപ്ലിംഗ്.',te:'పోన్జు సాస్‌తో పాన్-ఫ్రైడ్ పంది మాంసం డంప్లింగ్‌లు.'},price:320,emoji:'🥟',veg:false,chef_pick:true,new:false,available:true,glb_url:'3d-model/Gyoza/Gyoza.glb'},
   {id:'g2',name:'Edamame',jp:'枝豆',names:{hi:'एडामामे',kn:'ಎಡಮಾಮೆ',ta:'எடமாமே',ml:'എഡമാമെ',te:'ఎడమామె'},category:'Starters',desc:{en:'Steamed young soybeans lightly seasoned with Himalayan sea salt.',jp:'ヒマラヤ塩で味付けした蒸し枝豆。',hi:'हिमालयी नमक के साथ उबले सोयाबीन।',kn:'ಹಿಮಾಲಯ ಉಪ್ಪಿನಲ್ಲಿ ಆವಿಯಲ್ಲಿ ಬೇಯಿಸಿದ ಎಡಮಾಮೆ.',ta:'இமாலய உப்பில் வேகவைத்த சோயா பீன்ஸ்.',ml:'ഹിമാലയൻ ഉപ്പ് ചേർത്ത ആവിയിൽ പുഴുങ്ങിയ സോയ ബീൻ.',te:'హిమాలయన్ ఉప్పుతో ఉడికించిన సోయాబీన్‌లు.'},price:250,emoji:'🫘',veg:true,chef_pick:false,new:false,available:true,glb_url:'3d-model/Edamame/Edamame.glb'},
-  {id:'g3',name:'Karaage',jp:'唐揚げ',names:{hi:'काराआगे',kn:'ಕರಾಗೆ',ta:'கராகே',ml:'കരാഗെ',te:'కరాగే'},category:'Starters',desc:{en:'Crispy Japanese fried chicken served with yuzu mayo and a fresh lemon wedge.',jp:'ゆずマヨネーズとレモン添えのカリカリ唐揚げ。',hi:'युज़ु मेयोनेज़ और ताज़े नींबू के साथ जापानी तली हुई चिकन।',kn:'ಯುಝು ಮೇಯೊನೇಸ್ ಜೊತೆ ಜಪಾನಿ ಕರಕರೆ ಚಿಕನ್.',ta:'யுசு மேயோனேசுடன் ஜப்பானிய வறுத்த கோழி.',ml:'യുസു മയോണൈസ് ചേർത്ത ക്രിസ്‌പി ജാപ്പനീസ് ഫ്രൈഡ് ചിക്കൻ.',te:'యుజు మాయోనైజ్‌తో జపనీస్ క్రిస్పీ చికెన్.'},price:480,emoji:'🍗',veg:false,chef_pick:true,new:false,available:true,glb_url:'3d-model/Karaage/Karaage.glb'},
+  {id:'g3',name:'Karaage',jp:'唐揚げ',names:{hi:'काराआगे',kn:'ಕರಾಗೆ',ta:'கராகே',ml:'കരാഗെ',te:'కరాగే'},category:'Starters',desc:{en:'Crispy Japanese fried chicken served with yuzu mayo and a fresh lemon wedge.',jp:'ゆずマヨネーズとレモン添えのカリカリ唐揚げ。',hi:'युज़ु मेयोनेज़ और ताज़े नींबू के साथ जापानी तली हुई चिकन।',kn:'ಯುಝು ಮೇಯೊನೇಸ್ ಜೊತೆ ಜಪಾನಿ ಕರಕರೆ ಚಿಕನ್.',ta:'யுஸு மேயோனேஸுடன் ஜப்பானிய வறுத்த கோழி.',ml:'യുസു മയോണൈസ് ചേർത്ത ക്രിസ്‌പി ജാപ്പനീസ് ഫ്രൈഡ് ചിക്കൻ.',te:'యుజు మాయోనైజ్‌తో జపనీస్ క్రిస్పీ చికెన్.'},price:480,emoji:'🍗',veg:false,chef_pick:true,new:false,available:true,glb_url:'3d-model/Karaage/Karaage.glb'},
   {id:'g4',name:'Miso Soup',jp:'味噌汁',names:{hi:'मिसो सूप',kn:'ಮಿಸೋ ಸೂಪ್',ta:'மிசோ சூப்',ml:'മിസോ സൂപ്പ്',te:'మిసో సూప్'},category:'Starters',desc:{en:'Classic dashi and tofu miso soup with wakame seaweed and spring onion.',jp:'わかめとねぎ入りの伝統的な味噌汁。',hi:'वाकामे शैवाल और हरे प्याज़ के साथ मिसो सूप।',kn:'ವಾಕಾಮೆ ಮತ್ತು ಹಸಿರು ಈರುಳ್ಳಿಯೊಂದಿಗೆ ಮಿಸೋ ಸೂಪ್.',ta:'வாக்காமே கடற்பாசி மற்றும் வசம்பு வெங்காயத்துடன் மிசோ சூப்.',ml:'വകാമെ ചേർത്ത ക്ലാസിക് ദാഷി ടോഫു മിസോ സൂപ്പ്.',te:'వకామేతో మిసో సూప్.'},price:180,emoji:'🍵',veg:true,chef_pick:false,new:false,available:true,glb_url:'3d-model/Miso-Soup/Miso-Soup.glb'},
   {id:'g5',name:'Takoyaki',jp:'たこ焼き',names:{hi:'टाकोयाकी',kn:'ತಕೋಯಾಕಿ',ta:'டக்கோயாகி',ml:'ടക്കൊയാക്കി',te:'టకోయాకి'},category:'Starters',desc:{en:'Octopus balls topped with bonito flakes and takoyaki sauce. 6 pieces.',jp:'かつお節とたこ焼きソースをのせたたこ焼き。6個入り。',hi:'बोनिटो फ्लेक्स और सॉस से सजी ऑक्टोपस बॉल्स। 6 नग।',kn:'ಬೋನಿಟೋ ಹಣಿಕೆ ಮತ್ತು ಸಾಸ್ ಹಾಕಿದ ಆಕ್ಟೋಪಸ್ ಚೆಂಡುಗಳು. 6 ತುಂಡು.',ta:'போனிட்டோ செதில்கள் மற்றும் சாஸ் ஊற்றிய ஆக்டோபஸ் பந்துகள். 6 துண்டுகள்.',ml:'ബോണിറ്റോ ഫ്ലേക്ക്സ് ചേർത്ത ടക്കൊയാക്കി. 6 എണ്ണം.',te:'బోనిటో ఫ్లేక్స్‌తో టకోయాకి. 6 ముక్కలు.'},price:390,emoji:'🐙',veg:false,chef_pick:false,new:true,available:true,glb_url:'3d-model/takoyaki/takoyaki.glb'},
   {id:'g6',name:'Agedashi Tofu',jp:'揚げ出し豆腐',names:{hi:'अगेदाशी टोफू',kn:'ಅಗೆದಾಶಿ ಟೋಫು',ta:'அகேடாஷி டோஃபு',ml:'അഗേദാഷി ടോഫു',te:'అగేదాషి టోఫు'},category:'Starters',desc:{en:'Soft silken tofu in a savory dashi broth with grated daikon and ginger.',jp:'大根おろしと生姜を添えた揚げ出し豆腐。',hi:'कद्दूकस की हुई मूली और अदरक के साथ दशी शोरबे में टोफू।',kn:'ತುರಿದ ಡೈಕಾನ್ ಮತ್ತು ಶುಂಠಿಯೊಂದಿಗೆ ದಶಿ ಸಾರಿನಲ್ಲಿ ಟೋಫು.',ta:'துருவிய டைக்கான் மற்றும் இஞ்சியுடன் தாஷி குழம்பில் டோஃபு.',ml:'ഡൈക്കോൺ, ഇഞ്ചി ചേർത്ത ദാഷി ബ്രോത്തിൽ ടോഫു.',te:'తురిమిన డైకాన్‌తో దాషి సూప్‌లో టోఫు.'},price:350,emoji:'🍲',veg:true,chef_pick:true,new:false,available:true,glb_url:'3d-model/Agedashi-Tofu/Agedashi-Tofu.glb'},
@@ -902,29 +862,25 @@ async function fetchMenu() {
 }
 
 /* ══════════════════════════════════════════════
-   AR TRIGGER — FIXED
-   Uses model-viewer's canActivateAR property to
-   check support before calling activateAR().
-   Falls back to a helpful toast on unsupported devices.
+   AR TRIGGER — the key fix
 ══════════════════════════════════════════════ */
 function triggerAR(idx) {
-  const t  = T[currentLang];
   const mv = document.getElementById('mv_' + idx);
-
   if (!mv) {
-    showToast('📱 ' + t.arNoModel);
+    showToast('📱 No 3D model available');
     return;
   }
-
-  // model-viewer exposes canActivateAR = true only when
-  // the browser/device supports WebXR or Quick Look AR
-  if (mv.canActivateAR) {
-    showToast('✨ ' + t.arLaunching);
-    const btn = document.getElementById('arBtn_' + idx);
-    if (btn) { btn.classList.add('ar-active'); setTimeout(()=>btn.classList.remove('ar-active'), 3000); }
+  // model-viewer exposes activateAR() once it has loaded
+  if (typeof mv.activateAR === 'function') {
     mv.activateAR();
   } else {
-    showToast('📱 ' + t.arNotAvail);
+    // Fallback: click the hidden slot button
+    const slotBtn = document.getElementById('arSlotBtn_' + idx);
+    if (slotBtn) {
+      slotBtn.click();
+    } else {
+      showToast('📱 AR not supported on this browser');
+    }
   }
 }
 
@@ -983,7 +939,7 @@ function buildCards() {
       min-camera-orbit="auto auto 5%"
       max-camera-orbit="auto auto 220%"
       style="width:100%;height:100%;background:transparent;--poster-color:transparent">
-      <button slot="ar-button" style="display:none;position:absolute;width:0;height:0;opacity:0;pointer-events:none;"></button>
+      <button slot="ar-button" id="arSlotBtn_${idx}" style="display:none;position:absolute;"></button>
     </model-viewer>
     <div class="model-loader" id="loader_${idx}">
       <div class="loader-ring"></div>
@@ -1033,15 +989,10 @@ function buildCards() {
       <div class="btn-add-cart-sub">₹ ${item.price.toLocaleString('en-IN')} per item</div>
     </div>
   </button>
-
-  <button
-    class="btn-ar${has3d ? '' : ' no-model'}"
-    id="arBtn_${idx}"
-    onclick="${has3d ? `triggerAR(${idx})` : `showToast('📱 ' + T[currentLang].arNoModel)`}"
-    title="${has3d ? 'View in Augmented Reality' : t.arNotAvail}">
+  <button class="btn-ar${has3d?'':' no-model'}" onclick="${has3d?`triggerAR(${idx})`:'void(0)'}" title="${has3d?'View in Augmented Reality':t.arNotAvail}" id="arBtn_${idx}">
     <div class="btn-ar-icon">${arSVG}</div>
     <span class="btn-ar-txt">${t.arBtn}</span>
-    <div class="btn-ar-badge">${has3d ? t.tapAR : t.arNotAvail}</div>
+    ${!has3d?`<div class="btn-ar-badge">${t.arNotAvail}</div>`:''}
   </button>
 </div>`;
 
@@ -1066,26 +1017,12 @@ function buildCards() {
 
         // AR status feedback
         mv.addEventListener('ar-status', (e)=>{
-          const btn = document.getElementById('arBtn_' + idx);
           if (e.detail.status === 'failed') {
-            showToast('📱 ' + T[currentLang].arNotAvail);
-            if (btn) btn.classList.remove('ar-active');
+            showToast('📱 AR not available on this device/browser');
           } else if (e.detail.status === 'session-started') {
             showToast('✨ AR mode active');
-          } else if (e.detail.status === 'not-presenting') {
-            if (btn) btn.classList.remove('ar-active');
           }
         });
-
-        // Update AR button appearance once model-viewer knows AR support
-        mv.addEventListener('load', () => {
-          const btn = document.getElementById('arBtn_' + idx);
-          if (btn && !mv.canActivateAR) {
-            btn.classList.add('ar-unavailable');
-            const badge = btn.querySelector('.btn-ar-badge');
-            if (badge) badge.textContent = T[currentLang].arNotAvail;
-          }
-        }, {once: true});
       }
     }
   });
@@ -1305,7 +1242,7 @@ function wcSend(key){
   const msgKey=labelKey+'Msg';
   const label=t[labelKey]||key;const msgBody=t[msgKey]||label;
   const time=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
-  const waMsg=`🔔 *STAFF REQUEST*\n━━━━━━━━━━━━━━━\n*${action.emoji} ${label}*\n*Table :* ${TABLE_NUMBER}\n*Time  :* ${time}\n━━━━━━━━━━━━━━━\n${msgBody} Table ${TABLE_NUMBER}\n_Sakura AR Menu · さくら_`;
+  const waMsg=`🔔 *STAFF REQUEST*\n━━━━━━━━━━━━━\n*${action.emoji} ${label}*\n*Table :* ${TABLE_NUMBER}\n*Time  :* ${time}\n━━━━━━━━━━━━━\n${msgBody} Table ${TABLE_NUMBER}\n_Sakura AR Menu · さくら_`;
   window.open('https://wa.me/'+KITCHEN_WA+'?text='+encodeURIComponent(waMsg),'_blank');
   wcShowToast(action.emoji+' '+t.wcSentPrefix+' 📲');
   wcToggle();
